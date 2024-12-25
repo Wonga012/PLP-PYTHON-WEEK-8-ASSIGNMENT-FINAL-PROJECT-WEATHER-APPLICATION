@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Application</title>
+</head>
+<body>
+    <h1>Weather Application</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="location" placeholder="Enter a location" required>
+        <button type="submit">Get Weather</button>
+    </form>
+
+    {% if location %}
+        <h2>Weather in {{ location }}</h2>
+        <p>Temperature: {{ temperature }} °C</p>
+        <p>Humidity: {{ humidity }} %</p>
+        <p>Condition: {{ condition }}</p>
+    {% endif %}
+</body>
+</html>
