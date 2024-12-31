@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .weather-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .weather-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a73e8;
+            text-align: center;
+        }
+        .location {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #202124;
+        }
+        .temperature {
+            font-size: 2em;
+            color: #1a73e8;
+            margin: 10px 0;
+        }
+        .condition {
+            color: #5f6368;
+        }
+        .last-updated {
+            font-size: 0.8em;
+            color: #80868b;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather Application</h1>
+    <div class="weather-container" id="weatherContainer"></div>
+
+    <script>
+        async function fetchWeather() {
+            try {
+                const response = await fetch('/api/weather');
+                const data = await response.json();
+                const container = document.getElementById('weatherContainer');
+                container.innerHTML = '';
+
+                for (const [location, weather] of Object.entries(data)) {
+                    const card = document.createElement('div');
+                    card.className = 'weather-card';
+                    card.innerHTML = `
+                        <div class="location">${location}</div>
+                        <div class="temperature">${weather.temperature}°C</div>
+                        <div class="condition">${weather.condition}</div>
+                        <div>Humidity: ${weather.humidity}%</div>
+                        <div class="last-updated">Last updated: ${new Date(weather.last_updated).toLocaleString()}</div>
+                    `;
+                    container.appendChild(card);
+                }
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+            }
+        }
+
+        // Fetch weather data immediately and every 5 minutes
+        fetchWeather();
+        setInterval(fetchWeather, 300000);
+    </script>
+</body>
+</html>
